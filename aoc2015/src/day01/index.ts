@@ -5,23 +5,36 @@ const parseInput = (rawInput: string) => rawInput;
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  let result = 0;
+  let current_floor = 0;
 
   for (let i = 0; i < input.length; i++) {
     if (input[i] === "(") {
-      result++;
+      current_floor++;
     } else {
-      result--;
+      current_floor--;
     }
   }
 
-  return result;
+  return current_floor;
 };
 
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return;
+  let current_floor = 0;
+
+  for (let i = 0; i < input.length; i++) {
+    if (input[i] === "(") {
+      current_floor++;
+    } else {
+      current_floor--;
+    }
+    if (current_floor === -1) {
+      return i + 1;
+    }
+  }
+
+  return Infinity
 };
 
 run({
@@ -68,10 +81,14 @@ run({
   },
   part2: {
     tests: [
-      // {
-      //   input: ``,
-      //   expected: "",
-      // },
+      {
+        input: `)`,
+        expected: 1
+      },
+      {
+        input: `()())`,
+        expected: 5
+      }
     ],
     solution: part2,
   },

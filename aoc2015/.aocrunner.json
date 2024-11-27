@@ -8,13 +8,13 @@
         "solved": true,
         "result": "280",
         "attempts": [],
-        "time": 0.3078
+        "time": 0.296
       },
       "part2": {
-        "solved": false,
-        "result": null,
+        "solved": true,
+        "result": "1797",
         "attempts": [],
-        "time": null
+        "time": 0.0897
       }
     },
     {
