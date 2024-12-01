@@ -1,4 +1,5 @@
 import run from "aocrunner";
+import { get } from "http";
 
 const parseInput = (rawInput: string) => rawInput;
 
@@ -47,24 +48,24 @@ const part2 = (rawInput: string) => {
   list1 = list1.sort((a, b) => a - b);
   list2 = list2.sort((a, b) => a - b);
 
-  for (let i = 0; i < list1.length; i++) {
-    let indexList2 = 0;
-    let counter = 0;
-    while (list1[i] >= list2[indexList2]) {
-      if (list1[i] == list2[indexList2]) {
-        counter++;
-      }
-      if (indexList2 == list2.length) {
-        break;
-      }
-      indexList2++;
-
-    }  
-    result += list1[i] * counter;
+  for (let i = 0; i < list1.length; i++) {  
+    
+    result += list1[i] * getOccurrence(list2, list1[i]);
   }
 
   return result + "";
 };
+
+const getOccurrence = (array: Array<number>, value: number) => {
+  let result = 0;
+  for (let i = 0; array[i] <= value && i < array.length; i++) {
+    if (array[i] == value) {
+      result++;
+    }
+  }
+  return result;
+  //return array.filter((v) => (v === value)).length;
+}
 
 run({
   part1: {
