@@ -8,8 +8,6 @@ class solver {
 
   active = true;
 
-  mul = (x: number, y: number) => x * y;
-
   calculateProduct = (input: string) => input.slice(4,-1).split(',').map(Number).reduce((m, n) => m * n, this.active ? 1 : 0);  
 
   decider = (input: string) => { 
