@@ -2,6 +2,8 @@ import run from "aocrunner";
 
 const parseInput = (rawInput: string) => rawInput;
 
+const sum = (a:number,b:number) => a+b
+
 
 class solver {
   private input: any;
@@ -34,7 +36,7 @@ class solver {
                                 .map( ( line : string) => line.split(":"))
                                 .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
 
-    return equations.map((eq: Array<{solution : number, parameters : Array<number>}> ) => this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0 ).reduce((a,b) => a+b);
+    return equations.map((eq: [number, number[]] ) => this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0 ).reduce(sum);
   }
 
   part2() {
@@ -42,7 +44,7 @@ class solver {
                                 .map( ( line : string) => line.split(":"))
                                 .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
 
-    return equations.map((eq: Array<{solution : number, parameters : Array<number>}> ) => this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0 ).reduce((a,b) => a+b);
+    return equations.map((eq: [number, number[]] ) => this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0 ).reduce(sum);
   }
 }
 
