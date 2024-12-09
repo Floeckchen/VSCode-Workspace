@@ -21,14 +21,10 @@ class solver {
     if (parameters[0] > solution) {
       return false;
     }
-
-    if (concatActive) {
-      return ( this.isEqationSolvable(solution, [ parameters[0] + parameters[1] ].concat(parameters.slice(2)), true) 
-            || this.isEqationSolvable(solution, [ parameters[0] * parameters[1] ].concat(parameters.slice(2)), true) 
-            || this.isEqationSolvable(solution, [ +( "" + parameters[0] + parameters[1] ) ].concat(parameters.slice(2)), true) );
-    }
-    return ( this.isEqationSolvable(solution, [ parameters[0] + parameters[1] ].concat(parameters.slice(2))) 
-          || this.isEqationSolvable(solution, [ parameters[0] * parameters[1] ].concat(parameters.slice(2))) );
+    
+    return ( this.isEqationSolvable(solution, [ parameters[0] + parameters[1] ].concat(parameters.slice(2)), concatActive) 
+          || this.isEqationSolvable(solution, [ parameters[0] * parameters[1] ].concat(parameters.slice(2)), concatActive) 
+          || concatActive && ( this.isEqationSolvable(solution, [ +( "" + parameters[0] + parameters[1] ) ].concat(parameters.slice(2)), concatActive) ) );
   }
 
   part1() {
