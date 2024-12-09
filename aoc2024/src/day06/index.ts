@@ -108,7 +108,7 @@ class solver {
     for (let yBox = 0; yBox < this.warehouse.length; yBox++) {
       for (let xBox = 0; xBox < this.warehouse[yBox].length; xBox++) {
         this.reset();
-        if (this.warehouse[yBox][xBox] === '#') {
+        if (this.warehouse[yBox][xBox] === '#' || this.warehouse[yBox][xBox] === '^' ) {
           continue;
         }      
 
