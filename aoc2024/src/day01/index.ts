@@ -1,12 +1,11 @@
 import run from "aocrunner";
-import { get } from "http";
 
 const parseInput = (rawInput: string) => rawInput;
 
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  var lines = input.split("\n");
+  const lines = input.split("\n");
 
   let result = 0;
   let list1 = [];
@@ -32,7 +31,7 @@ const part1 = (rawInput: string) => {
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  var lines = input.split("\n");
+  const lines = input.split("\n");
 
   let result = 0;
   let list1 = [];

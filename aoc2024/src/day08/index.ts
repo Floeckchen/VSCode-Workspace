@@ -18,7 +18,7 @@ class solver {
     const max_y = grid.length;
 
     const antennas : string[] = [];
-    let antinodes : Set<string> = new Set();
+    const antinodes : Set<string> = new Set();
 
     //Find all antennas
     for (let i = 0; i < grid.length; i++) {
@@ -30,7 +30,7 @@ class solver {
     }
 
     for (let i = 0; i < antennas.length; i++) {
-      let antenna = antennas[i];
+      const antenna = antennas[i];
 
       for (let row = 0; row < grid.length; row++) {
         for (let column = 0; column < grid[row].length; column++) {
@@ -45,14 +45,14 @@ class solver {
                 }
 
                 if (grid[y][x] == antenna) {
-                  let dist_x = column - x;
-                  let dist_y = row - y;
+                  const dist_x = column - x;
+                  const dist_y = row - y;
 
-                  let y1 = row + dist_y;
-                  let x1 = column + dist_x;
+                  const y1 = row + dist_y;
+                  const x1 = column + dist_x;
 
-                  let y2 = y - dist_y;
-                  let x2 = x - dist_x;
+                  const y2 = y - dist_y;
+                  const x2 = x - dist_x;
 
                   if (!(y1 < min_y || y1 >= max_y || x1 < min_x || x1 >= max_x)) {
                     antinodes.add(`${y1},${x1}`);
@@ -81,7 +81,7 @@ class solver {
     const max_y = grid.length;
 
     const antennas : string[] = [];
-    let antinodes : Set<string> = new Set();
+    const antinodes : Set<string> = new Set();
 
     //Find all antennas
     for (let i = 0; i < grid.length; i++) {
@@ -93,7 +93,7 @@ class solver {
     }
 
     for (let i = 0; i < antennas.length; i++) {
-      let antenna = antennas[i];
+      const antenna = antennas[i];
 
       for (let row = 0; row < grid.length; row++) {
         for (let column = 0; column < grid[row].length; column++) {
@@ -108,8 +108,8 @@ class solver {
                 }
 
                 if (grid[y][x] == antenna) {
-                  let dist_x = column - x;
-                  let dist_y = row - y;
+                  const dist_x = column - x;
+                  const dist_y = row - y;
 
                   let y1 = row;
                   let x1 = column;

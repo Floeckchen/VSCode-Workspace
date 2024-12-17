@@ -1,5 +1,4 @@
 import run from "aocrunner";
-import { get } from "http";
 
 const parseInput = (rawInput: string) => rawInput;
 

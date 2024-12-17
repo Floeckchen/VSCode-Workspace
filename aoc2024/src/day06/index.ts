@@ -1,5 +1,4 @@
 import run from "aocrunner";
-import { dir } from "console";
 
 const parseInput = (rawInput: string) => rawInput;
 
@@ -42,12 +41,18 @@ class solver {
   turnRight( markTurns: boolean ) {
     if (this.direction[0] === 0) {      
       if (markTurns) {
-        this.direction[1] === 1 ? this.placesTurned[this.y][this.x] *= 2 : this.placesTurned[this.y][this.x] *= 3;
+        if (this.direction[1] === 1)
+          this.placesTurned[this.y][this.x] *= 2 
+        else
+          this.placesTurned[this.y][this.x] *= 3;
       }
       this.direction = [-this.direction[1], 0];
     } else {      
       if (markTurns) {
-        this.direction[0] === 1 ? this.placesTurned[this.y][this.x] *= 5 : this.placesTurned[this.y][this.x] *= 7;
+        if (this.direction[0] === 1)
+          this.placesTurned[this.y][this.x] *= 5 
+        else
+          this.placesTurned[this.y][this.x] *= 7;
       }
       this.direction = [0, this.direction[0]];
     }

@@ -10,11 +10,11 @@ class solver {
   }
 
   howManyXmasStartInLine(line: string, i: number, lines: string[]) : number {
-    return line.split('').map((c, j, line) => this.howManyXmasStartHere(i,j,lines)).reduce((m, n) => m + n);
+    return line.split('').map((c, j) => this.howManyXmasStartHere(i,j,lines)).reduce((m, n) => m + n);
   }
 
   howManyCrossedMasStartInLine(line: string, i: number, lines: string[]) : number {
-    return line.split('').map((c, j, line) => this.howManyCrossedMasStartHere(i,j,lines)).reduce((m, n) => m + n);
+    return line.split('').map((c, j) => this.howManyCrossedMasStartHere(i,j,lines)).reduce((m, n) => m + n);
   }
 
   howManyXmasStartHere(i: number, j: number, lines: string[]) : number {

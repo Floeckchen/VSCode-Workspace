@@ -6,9 +6,9 @@ const sum = (a:number,b:number) => a+b
 
 
 class solver {
-  private input: any;
+  private input: string;
 
-  constructor(input: any) {
+  constructor(input: string) {
     this.input = input;
   }
 
@@ -28,19 +28,19 @@ class solver {
   }
 
   part1() {
-    const equations = this.input.split("\n")
+    const equations : [number, number[]][] = this.input.split("\n")
                                 .map( ( line : string) => line.split(":"))
                                 .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
 
-    return equations.map((eq: [number, number[]] ) => this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0 ).reduce(sum);
+    return equations.map( ( eq ) => this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0 ).reduce(sum);
   }
 
   part2() {
-    const equations = this.input.split("\n")
+    const equations : [number, number[]][] = this.input.split("\n")
                                 .map( ( line : string) => line.split(":"))
                                 .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
 
-    return equations.map((eq: [number, number[]] ) => this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0 ).reduce(sum);
+    return equations.map( ( eq ) => this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0 ).reduce(sum);
   }
 }
 

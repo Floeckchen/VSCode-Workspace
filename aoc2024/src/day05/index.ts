@@ -21,7 +21,7 @@ class solver {
       return page[0];
     }   
     
-    let smallest = page.map((number) => !rulesMap.includes( number + '|' + page[0] )).indexOf(false); 
+    const smallest = page.map((number) => !rulesMap.includes( number + '|' + page[0] )).indexOf(false); 
     if ( smallest === -1 ){
       const first = page[0];
       page.splice(0, 1);

@@ -1,5 +1,4 @@
 import run from "aocrunner";
-import { get } from "http";
 
 const parseInput = (rawInput: string) => rawInput;
 
@@ -11,12 +10,12 @@ class solver {
   input: string;
 
   part1() : string {
-    let reports = this.getReports();
+    const reports = this.getReports();
 
-    var validReports = 0;
+    let validReports = 0;
 
     for (let i = 0; i < reports.length; i++) {
-      let report = reports[i];
+      const report = reports[i];
       if (this.reportIsValid(report)) {
         validReports++;
       }
@@ -26,15 +25,15 @@ class solver {
   }
 
   part2() : string {
-    let reports = this.getReports();
+    const reports = this.getReports();
 
-    var validReports = 0;
+    let validReports = 0;
 
     for (let i = 0; i < reports.length; i++) {
-      let report = reports[i];
+      const report = reports[i];
 
       for (let j = 0; j < report.length; j++) {
-        let tempReport = [...report];
+        const tempReport = [...report];
 
         tempReport.splice(j, 1);   
 
@@ -57,7 +56,7 @@ class solver {
   }
 
   isMonotone(report: Array<number>): boolean {
-    let isIncreasing = ( report[0] < report[1] );
+    const isIncreasing = ( report[0] < report[1] );
     for (let i = 0; i < report.length - 1; i++) {
       if ( (isIncreasing && report[i] > report[i + 1]) 
         || (!isIncreasing && report[i] < report[i + 1]) ) {
@@ -69,7 +68,7 @@ class solver {
   }
   isNotSteep(report: Array<number>): boolean {
     for (let i = 0; i < report.length - 1; i++) {
-      let diff = Math.abs(report[i] - report[i + 1]);
+      const diff = Math.abs(report[i] - report[i + 1]);
       if ( (diff > 3) ||( diff == 0)) {
         return false;
       }
