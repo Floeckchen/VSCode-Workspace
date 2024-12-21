@@ -61,7 +61,7 @@ class solver {
     currentStones = this.blink(currentStones, 25);  
 
     let count = 0;
-    currentStones.forEach( (value, key) => {
+    currentStones.forEach( (value) => {
       count += value;
     } );
 
@@ -76,7 +76,7 @@ class solver {
     currentStones = this.blink(currentStones, 75);  
 
     let count = 0;
-    currentStones.forEach( (value, key) => {
+    currentStones.forEach( (value) => {
       count += value;
     } );
 
