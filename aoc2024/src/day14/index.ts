@@ -73,18 +73,6 @@ class solver {
     return grid.map( (row) => row.join(""));
   }
 
-  isPalindrome(str: string): boolean {
-    if( !str.includes("#") ) 
-      return false;
-
-    if (str === str.split("").reverse().join("")){
-      console.log("Palindrome");
-      console.log(str);
-      console.log("Palindrome")
-    }
-    return str === str.split("").reverse().join("");
-  }
-
   part2() {
     let quadrantCounts = [0,0,0,0,0];
     let i = 0;
