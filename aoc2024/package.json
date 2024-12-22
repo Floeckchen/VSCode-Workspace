@@ -23,6 +23,10 @@
     "node": ">=16.13.0"
   },
   "dependencies": {
+    "@types/readline-sync": "^1.4.8",
+    "prompt-sync": "^4.2.0",
+    "readline-sync": "^1.4.10",
     "wait-for-user-input": "^1.0.0"
-  }
+  },
+  "main": "index.js"
 }
