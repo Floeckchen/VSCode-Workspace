@@ -1,5 +1,4 @@
 import run from "aocrunner";
-import { count } from "console";
 
 const parseInput = (rawInput: string) => rawInput;
 
