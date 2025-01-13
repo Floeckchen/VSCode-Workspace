@@ -9,20 +9,33 @@ class solver {
     this.input = input;
   }
 
-  summitsReached(map: number[][], i: number, j: number, currentHeight: number) : number[][]{
-
-    if(map[i][j] === 9)
-      return [[i,j]];
+  summitsReached(
+    map: number[][],
+    i: number,
+    j: number,
+    currentHeight: number,
+  ): number[][] {
+    if (map[i][j] === 9) return [[i, j]];
 
     const result = [];
 
-    const direction : Array<[number, number]> = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    const direction: Array<[number, number]> = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
 
     for (let dir = 0; dir < 4; dir++) {
       const newI = i + direction[dir][0];
       const newJ = j + direction[dir][1];
- 
-      if (newI < 0 || newI >= map.length || newJ < 0 || newJ >= map[newI].length) {
+
+      if (
+        newI < 0 ||
+        newI >= map.length ||
+        newJ < 0 ||
+        newJ >= map[newI].length
+      ) {
         continue;
       }
 
@@ -33,11 +46,13 @@ class solver {
       result.push(...this.summitsReached(map, newI, newJ, map[newI][newJ]));
     }
 
-    return result
+    return result;
   }
 
   part1() {
-    const map = this.input.split("\n").map((line) => line.split("").map(Number));
+    const map = this.input
+      .split("\n")
+      .map((line) => line.split("").map(Number));
 
     let result = 0;
 
@@ -46,7 +61,9 @@ class solver {
         if (map[i][j] != 0) {
           continue;
         }
-        result += new Set( this.summitsReached(map, i, j, 0).map( x => `${ x[0] }|${ x[1] }`) ).size;
+        result += new Set(
+          this.summitsReached(map, i, j, 0).map((x) => `${x[0]}|${x[1]}`),
+        ).size;
       }
     }
 
@@ -54,7 +71,9 @@ class solver {
   }
 
   part2() {
-    const map = this.input.split("\n").map((line) => line.split("").map(Number));
+    const map = this.input
+      .split("\n")
+      .map((line) => line.split("").map(Number));
 
     let result = 0;
 

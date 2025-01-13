@@ -10,40 +10,55 @@ class solver {
   }
 
   parseNumbers(input: string): number[] {
-    return input.split(/[^0-9]+/).map(Number).splice(1);
+    return input
+      .split(/[^0-9]+/)
+      .map(Number)
+      .splice(1);
   }
 
   getGames(input: string): number[][][] {
-    return input.split("\n\n").map((game) => game.split("\n").map((line) => this.parseNumbers(line) ) );
+    return input
+      .split("\n\n")
+      .map((game) => game.split("\n").map((line) => this.parseNumbers(line)));
   }
 
   solveGame(game: number[][]): number {
     const [a, b, prize] = game;
 
-    const pressA = ( (prize[0] * b[1]) - (prize[1] * b[0]) ) / ( (a[0] * b[1]) - (a[1] * b[0]) );
-    const pressB = ( (prize[1] * a[0]) - (prize[0] * a[1]) ) / ( (a[0] * b[1]) - (a[1] * b[0]) );
+    const pressA =
+      (prize[0] * b[1] - prize[1] * b[0]) / (a[0] * b[1] - a[1] * b[0]);
+    const pressB =
+      (prize[1] * a[0] - prize[0] * a[1]) / (a[0] * b[1] - a[1] * b[0]);
 
-    if ( Number.isInteger(pressA) && Number.isInteger(pressB)  && pressA >= 0 && pressB >= 0) {
+    if (
+      Number.isInteger(pressA) &&
+      Number.isInteger(pressB) &&
+      pressA >= 0 &&
+      pressB >= 0
+    ) {
       return pressA * 3 + pressB;
     }
     return 0;
   }
 
   adjust(game: number[][]): number[][] {
-    game[2] = game[2].map( (x) => x + 10000000000000);
+    game[2] = game[2].map((x) => x + 10000000000000);
     return game;
   }
 
   part1() {
     const game = this.getGames(this.input);
 
-    return game.map( (game) => this.solveGame(game) ).reduce((a,b) => a+b);
+    return game.map((game) => this.solveGame(game)).reduce((a, b) => a + b);
   }
 
   part2() {
     const game = this.getGames(this.input);
 
-    return game.map( (game) => this.adjust(game) ).map( (game) => this.solveGame(game) ).reduce((a,b) => a+b);
+    return game
+      .map((game) => this.adjust(game))
+      .map((game) => this.solveGame(game))
+      .reduce((a, b) => a + b);
   }
 }
 

@@ -2,35 +2,41 @@ import run from "aocrunner";
 
 const parseInput = (rawInput: string) => rawInput;
 
-const getInitialInputAndWires = (input: string) => { 
+const getInitialInputAndWires = (input: string) => {
   const [initalInput, wires] = input.split("\n\n");
 
-  return [initalInput.split("\n").map(x => x.split(": ")), wires.split("\n").map(x => x.split(" -> ") )];
+  return [
+    initalInput.split("\n").map((x) => x.split(": ")),
+    wires.split("\n").map((x) => x.split(" -> ")),
+  ];
 };
 
 class solver {
   private input: string;
-  private wires : Map<string, number>;
-  private wireConnections :Map<string, string>;
+  private wires: Map<string, number>;
+  private wireConnections: Map<string, string>;
 
   constructor(input: string) {
     this.input = input;
     this.wires = new Map<string, number>();
 
-    const [initialInput, wireConnections] = getInitialInputAndWires(this.input);    
-    
-    this.wireConnections = wireConnections.reduce((acc, [value, key]) => { acc.set(key as string, value as string); return acc }, new Map<string, string>())
+    const [initialInput, wireConnections] = getInitialInputAndWires(this.input);
 
-    for ( const [key, value] of initialInput ) {
+    this.wireConnections = wireConnections.reduce((acc, [value, key]) => {
+      acc.set(key as string, value as string);
+      return acc;
+    }, new Map<string, string>());
+
+    for (const [key, value] of initialInput) {
       this.wires.set(key as string, parseInt(value as string));
     }
-  
-    for ( const wire of this.wireConnections.keys() ) {
-      this.wires.set( wire, -1);
+
+    for (const wire of this.wireConnections.keys()) {
+      this.wires.set(wire, -1);
     }
   }
 
-  logWire(start: string, depth=0) {
+  logWire(start: string, depth = 0) {
     if (depth > 10) {
       return;
     }
@@ -48,26 +54,25 @@ class solver {
   setWiresMap(i: number) {
     this.wires = new Map<string, number>();
 
-    const [initialInput, _] = getInitialInputAndWires(this.input);  
+    const [initialInput, _] = getInitialInputAndWires(this.input);
 
-    for ( const [key, _] of initialInput ) {
-      if ( parseInt(key.slice(1)) == i  || parseInt(key.slice(1)) == i + 1 ) {  
-        if ( key[0] == "x" ) {
-          this.wires.set(key as string, 1);     
+    for (const [key, _] of initialInput) {
+      if (parseInt(key.slice(1)) == i || parseInt(key.slice(1)) == i + 1) {
+        if (key[0] == "x") {
+          this.wires.set(key as string, 1);
         }
       } else {
         this.wires.set(key as string, 0);
       }
     }
-  
-    for ( const wire of this.wireConnections.keys() ) {
-      this.wires.set( wire, -1);
-    }
 
+    for (const wire of this.wireConnections.keys()) {
+      this.wires.set(wire, -1);
+    }
   }
 
-  evaluateWire(wire: string, visited : Array<string> = []) {
-    if( this.wires.get(wire) != -1 ) {
+  evaluateWire(wire: string, visited: Array<string> = []) {
+    if (this.wires.get(wire) != -1) {
       return this.wires.get(wire);
     }
     if (visited.includes(wire)) {
@@ -86,7 +91,7 @@ class solver {
       return -1;
     }
 
-    switch(operator) {
+    switch (operator) {
       case "AND":
         this.wires.set(wire, firstValue & secondValue);
         break;
@@ -101,75 +106,81 @@ class solver {
     return this.wires.get(wire);
   }
 
-
-
   part1() {
     let result = 0;
 
-    for( const wire of this.wires.keys() ) {
+    for (const wire of this.wires.keys()) {
       if (wire[0] != "z") {
         continue;
       }
-      result += this.evaluateWire(wire)! * ( 2 ** parseInt(wire.slice(1)));
+      result += this.evaluateWire(wire)! * 2 ** parseInt(wire.slice(1));
     }
 
     return result;
   }
 
-  getErrorCount( ) {
+  getErrorCount() {
     let errorCount = 0;
-    for ( let i = 0; i < 44; i++ ) {
+    for (let i = 0; i < 44; i++) {
       this.setWiresMap(i);
 
-      let result = 0;      
+      let result = 0;
 
-      for( const wire of this.wires.keys() ) {
+      for (const wire of this.wires.keys()) {
         if (wire[0] != "z") {
           continue;
         }
         result += this.evaluateWire(wire)! * 2 ** parseInt(wire.slice(1));
       }
-      if ( result != ( 2 ** i + 2 ** (i+1) ) ) {        
+      if (result != 2 ** i + 2 ** (i + 1)) {
         errorCount++;
-      }        
-    } 
-    return errorCount;   
+      }
+    }
+    return errorCount;
   }
 
-  part2() {  
+  part2() {
     const wiresToSwap = [];
 
-    let errorCount = this.getErrorCount( );
+    let errorCount = this.getErrorCount();
     console.log("Initial error count", errorCount);
 
     let i = 0;
 
-    for( const connection1 of this.wireConnections.keys() ) {
-      console.log( i / this.wireConnections.size * 100, "%");      
-      for ( const connection2 of [...this.wireConnections.keys()].splice(i+1) ) {        
-        if ( connection1 == connection2 ) {
+    for (const connection1 of this.wireConnections.keys()) {
+      console.log((i / this.wireConnections.size) * 100, "%");
+      for (const connection2 of [...this.wireConnections.keys()].splice(
+        i + 1,
+      )) {
+        if (connection1 == connection2) {
           continue;
         }
 
-        const temp = this.wireConnections.get(connection1);      
-        this.wireConnections.set(connection1, this.wireConnections.get(connection2)!);
+        const temp = this.wireConnections.get(connection1);
+        this.wireConnections.set(
+          connection1,
+          this.wireConnections.get(connection2)!,
+        );
         this.wireConnections.set(connection2, temp!);
 
-        const errorCountTmp = this.getErrorCount( );       
+        const errorCountTmp = this.getErrorCount();
 
-        if ( errorCountTmp < errorCount ) { 
+        if (errorCountTmp < errorCount) {
           console.log("Swapping", connection1, connection2, errorCountTmp);
           wiresToSwap.push(connection1);
           wiresToSwap.push(connection2);
           errorCount = errorCountTmp;
-          
-          if (errorCount == 0 ) {
+
+          if (errorCount == 0) {
             return wiresToSwap.sort().join(",");
           }
           continue;
         }
 
-        this.wireConnections.set(connection2, this.wireConnections.get(connection1)!);
+        this.wireConnections.set(
+          connection2,
+          this.wireConnections.get(connection1)!,
+        );
         this.wireConnections.set(connection1, temp!);
       }
       i++;

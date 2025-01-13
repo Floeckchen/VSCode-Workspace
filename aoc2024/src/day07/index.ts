@@ -2,8 +2,7 @@ import run from "aocrunner";
 
 const parseInput = (rawInput: string) => rawInput;
 
-const sum = (a:number,b:number) => a+b
-
+const sum = (a: number, b: number) => a + b;
 
 class solver {
   private input: string;
@@ -12,35 +11,64 @@ class solver {
     this.input = input;
   }
 
-  isEqationSolvable(solution: number, parameters: Array<number>, concatActive : boolean = false):boolean {
+  isEqationSolvable(
+    solution: number,
+    parameters: Array<number>,
+    concatActive: boolean = false,
+  ): boolean {
     // check if factors are empty
-    if (parameters.length === 1) {      
+    if (parameters.length === 1) {
       return solution === parameters[0];
     }
     // check if the first parameter is bigger than the solution
     if (parameters[0] > solution) {
       return false;
     }
-    
-    return ( this.isEqationSolvable(solution, [ parameters[0] + parameters[1] ].concat(parameters.slice(2)), concatActive) 
-          || this.isEqationSolvable(solution, [ parameters[0] * parameters[1] ].concat(parameters.slice(2)), concatActive) 
-          || concatActive && ( this.isEqationSolvable(solution, [ +( "" + parameters[0] + parameters[1] ) ].concat(parameters.slice(2)), concatActive) ) );
+
+    return (
+      this.isEqationSolvable(
+        solution,
+        [parameters[0] + parameters[1]].concat(parameters.slice(2)),
+        concatActive,
+      ) ||
+      this.isEqationSolvable(
+        solution,
+        [parameters[0] * parameters[1]].concat(parameters.slice(2)),
+        concatActive,
+      ) ||
+      (concatActive &&
+        this.isEqationSolvable(
+          solution,
+          [+("" + parameters[0] + parameters[1])].concat(parameters.slice(2)),
+          concatActive,
+        ))
+    );
   }
 
   part1() {
-    const equations : [number, number[]][] = this.input.split("\n")
-                                .map( ( line : string) => line.split(":"))
-                                .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
+    const equations: [number, number[]][] = this.input.split("\n")
+      .map((line: string) => line.split(":"))
+      .map(([a, b]: string[]) => [
+        parseInt(a),
+        b.trim().split(" ").map(Number),
+      ]);
 
-    return equations.map( ( eq ) => this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0 ).reduce(sum);
+    return equations
+      .map((eq) => (this.isEqationSolvable(eq[0], eq[1]) ? eq[0] : 0))
+      .reduce(sum);
   }
 
   part2() {
-    const equations : [number, number[]][] = this.input.split("\n")
-                                .map( ( line : string) => line.split(":"))
-                                .map( ( [a,b] : string[]) => [parseInt(a), b.trim().split(" ").map( Number )]);
+    const equations: [number, number[]][] = this.input.split("\n")
+      .map((line: string) => line.split(":"))
+      .map(([a, b]: string[]) => [
+        parseInt(a),
+        b.trim().split(" ").map(Number),
+      ]);
 
-    return equations.map( ( eq ) => this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0 ).reduce(sum);
+    return equations
+      .map((eq) => (this.isEqationSolvable(eq[0], eq[1], true) ? eq[0] : 0))
+      .reduce(sum);
   }
 }
 
