@@ -1,0 +1,19 @@
+{
+  "arrowParens": "always",
+  "bracketSpacing": true,
+  "experimentalTernaries": true,
+  "printWidth": 80,
+  "proseWrap": "preserve",
+  "semi": true,
+  "singleQuote": false,
+  "quoteProps": "consistent",
+  "tabWidth": 2,
+  "useTabs": false,
+  "trailingComma": "all",
+  "plugins": ["@yikes2000/prettier-plugin-merge-extras"],
+  "alignObjectProperties": "none",
+  "preserveFirstBlankLine": false,
+  "preserveLastBlankLine": false,
+  "returnParentheses": true,
+  "alignSingleProperty": false
+}
