@@ -51,9 +51,11 @@ class solver {
     const [initialInput, _] = getInitialInputAndWires(this.input);  
 
     for ( const [key, _] of initialInput ) {
-      if ( parseInt(key.slice(1)) == i  || parseInt(key.slice(1)) == i + 1 ) {  
-        if ( key[0] == "x" ) {
+      if ( parseInt(key.slice(1)) == i  || parseInt(key.slice(1)) == i + 1 || parseInt(key.slice(1)) == i + 2 ) {  
+        if ( key[0] == "x" || key[0] == "y" ) {
           this.wires.set(key as string, 1);     
+        } else {
+          this.wires.set(key as string, 0);
         }
       } else {
         this.wires.set(key as string, 0);
@@ -63,7 +65,68 @@ class solver {
     for ( const wire of this.wireConnections.keys() ) {
       this.wires.set( wire, -1);
     }
+  }
 
+  setWiresMapX(i: number) {
+    const [initialInput, _] = getInitialInputAndWires(this.input);  
+
+    const binary = i.toString(2).padStart(44, "0").split("").reverse().map(Number);
+
+    for ( const [key, _] of initialInput ) {       
+      if ( key[0] == "x" ) {
+        this.wires.set(key as string, binary[ parseInt(key.slice(1)) ]);     
+      } else {
+        this.wires.set(key as string, 0);
+      }      
+    }
+  
+    for ( const wire of this.wireConnections.keys() ) {
+      this.wires.set( wire, -1);
+    }
+  }
+  setWiresMapY(i: number) {
+    const [initialInput, _] = getInitialInputAndWires(this.input);  
+
+    const binary = i.toString(2).padStart(44, "0").split("").reverse().map(Number);
+
+    for ( const [key, _] of initialInput ) {       
+      if ( key[0] == "y" ) {
+        this.wires.set(key as string, binary[ parseInt(key.slice(1)) ]);     
+      } else {
+        this.wires.set(key as string, 0);
+      }      
+    }
+  
+    for ( const wire of this.wireConnections.keys() ) {
+      this.wires.set( wire, -1);
+    }
+  }
+
+  testRandomNumbers(count: number) {
+    this.wires = new Map<string, number>();    
+
+    for ( let i = 0; i < count; i++ ) {
+      //create two random numbers with 44 bits
+      const x = Math.floor(Math.random() * 2 ** 44);
+      const y = Math.floor(Math.random() * 2 ** 44);
+
+      this.setWiresMapX(x);
+      this.setWiresMapY(y);
+
+      let result = 0;
+
+      for( const wire of this.wires.keys() ) {
+        if (wire[0] != "z") {
+          continue;
+        }
+        result += this.evaluateWire(wire)! * ( 2 ** parseInt(wire.slice(1)));
+      }
+  
+      if ( result != x + y ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   evaluateWire(wire: string, visited : Array<string> = []) {
@@ -118,7 +181,7 @@ class solver {
 
   getErrorCount( ) {
     let errorCount = 0;
-    for ( let i = 0; i < 44; i++ ) {
+    for ( let i = 0; i < 42; i++ ) {
       this.setWiresMap(i);
 
       let result = 0;      
@@ -129,53 +192,92 @@ class solver {
         }
         result += this.evaluateWire(wire)! * 2 ** parseInt(wire.slice(1));
       }
-      if ( result != ( 2 ** i + 2 ** (i+1) ) ) {        
+      if ( result != 2 * ( 2 ** i + 2 ** (i+1) + 2 ** (i+2) ) ) {        
         errorCount++;
       }        
     } 
+      
     return errorCount;   
   }
 
+  swapWires( wire1: string, wire2: string ) {
+    const temp = this.wireConnections.get(wire1);      
+    this.wireConnections.set(wire1, this.wireConnections.get(wire2)!);
+    this.wireConnections.set(wire2, temp!);
+  }
+
   part2() {  
-    const wiresToSwap = [];
+    // const wiresToSwap = [];
 
-    let errorCount = this.getErrorCount( );
-    console.log("Initial error count", errorCount);
+    // const errorCount = this.getErrorCount( );
+    // console.log("Initial error count", errorCount);
 
-    let i = 0;
+    // let i = 0;
 
-    for( const connection1 of this.wireConnections.keys() ) {
-      console.log( i / this.wireConnections.size * 100, "%");      
-      for ( const connection2 of [...this.wireConnections.keys()].splice(i+1) ) {        
-        if ( connection1 == connection2 ) {
-          continue;
-        }
+    // for( const connection1 of this.wireConnections.keys() ) {
+    //   console.log( i / this.wireConnections.size * 100, "%");      
+    //   for ( const connection2 of [...this.wireConnections.keys()].splice(i+1) ) {        
+    //     const temp = this.wireConnections.get(connection1);      
+    //     this.wireConnections.set(connection1, this.wireConnections.get(connection2)!);
+    //     this.wireConnections.set(connection2, temp!);
 
-        const temp = this.wireConnections.get(connection1);      
-        this.wireConnections.set(connection1, this.wireConnections.get(connection2)!);
-        this.wireConnections.set(connection2, temp!);
+    //     const errorCountTmp = this.getErrorCount( );       
 
-        const errorCountTmp = this.getErrorCount( );       
+    //     if ( errorCountTmp < errorCount ) { 
+    //       console.log("Swapping", connection1, connection2, errorCountTmp);
+    //       wiresToSwap.push([connection1, connection2]);          
+    //     }
 
-        if ( errorCountTmp < errorCount ) { 
-          console.log("Swapping", connection1, connection2, errorCountTmp);
-          wiresToSwap.push(connection1);
-          wiresToSwap.push(connection2);
-          errorCount = errorCountTmp;
-          
-          if (errorCount == 0 ) {
-            return wiresToSwap.sort().join(",");
+    //     this.wireConnections.set(connection2, this.wireConnections.get(connection1)!);
+    //     this.wireConnections.set(connection1, temp!);
+    //   }
+    //   i++;
+    // }
+
+    // console.log(wiresToSwap);
+
+    const wiresToSwap = [
+      [ 'nwq', 'z36' ], [ 'z18', 'z19' ],
+      [ 'z18', 'fvw' ], [ 'mdb', 'z22' ],
+      [ 'fsw', 'z36' ], [ 'z19', 'cjb' ],
+      [ 'rpv', 'rqd' ], [ 'rpv', 'grf' ],
+      [ 'rqd', 'jqn' ], [ 'rqd', 'wpq' ],
+      [ 'z22', 'sbs' ], [ 'z37', 'z36' ],
+      [ 'grf', 'jqn' ], [ 'grf', 'wpq' ],
+      [ 'fvw', 'cjb' ], [ 'z36', 'vmq' ],
+      [ 'z36', 'kjd' ], [ 'vvt', 'cjb' ],
+      [ 'ffh', 'cjb' ]
+    ];
+
+    const goodSwaps = [];
+
+    for ( let swap1 = 0; swap1 < wiresToSwap.length; swap1++ ) {
+      for ( let swap2 = swap1 + 1; swap2 < wiresToSwap.length; swap2++ ) {
+        for ( let swap3 = swap2 + 1; swap3 < wiresToSwap.length; swap3++ ) {
+          for ( let swap4 = swap3 + 1; swap4 < wiresToSwap.length; swap4++ ) {
+            this.swapWires(wiresToSwap[swap1][0], wiresToSwap[swap1][1]);
+            this.swapWires(wiresToSwap[swap2][0], wiresToSwap[swap2][1]);
+            this.swapWires(wiresToSwap[swap3][0], wiresToSwap[swap3][1]);
+            this.swapWires(wiresToSwap[swap4][0], wiresToSwap[swap4][1]);
+
+            if ( this.getErrorCount() == 0 ) {
+              if( this.testRandomNumbers(50) ) {
+                goodSwaps.push( [wiresToSwap[swap1][0], wiresToSwap[swap1][1], wiresToSwap[swap2][0], wiresToSwap[swap2][1], wiresToSwap[swap3][0], wiresToSwap[swap3][1], wiresToSwap[swap4][0], wiresToSwap[swap4][1]].sort().join(",") );
+              }
+            }
+
+            this.swapWires(wiresToSwap[swap1][0], wiresToSwap[swap1][1]);
+            this.swapWires(wiresToSwap[swap2][0], wiresToSwap[swap2][1]);
+            this.swapWires(wiresToSwap[swap3][0], wiresToSwap[swap3][1]);
+            this.swapWires(wiresToSwap[swap4][0], wiresToSwap[swap4][1]);
           }
-          continue;
         }
-
-        this.wireConnections.set(connection2, this.wireConnections.get(connection1)!);
-        this.wireConnections.set(connection1, temp!);
       }
-      i++;
     }
 
-    return wiresToSwap.sort().join(",");
+    console.log(goodSwaps);
+
+    return 0;
   }
 }
 
@@ -252,6 +354,8 @@ run({
   part2: {
     tests: [
       // {
+      //   input: ``,
+      //   expected: "",
       // },
     ],
     solution: part2,
