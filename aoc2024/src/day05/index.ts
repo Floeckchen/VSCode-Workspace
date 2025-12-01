@@ -13,27 +13,32 @@ class solver {
     if (page.length === 1) {
       return true;
     }
-    return page.map((number) => !rulesMap.includes( number + '|' + page[0] )).every(v => v === true) && this.pageIsInOrder(page.slice(1), rulesMap);
+    return (
+      page
+        .map((number) => !rulesMap.includes(number + "|" + page[0]))
+        .every((v) => v === true) && this.pageIsInOrder(page.slice(1), rulesMap)
+    );
   }
 
   orderPage(page: string[], rulesMap: string[]): string {
     if (page.length === 1) {
       return page[0];
-    }   
-    
-    const smallest = page.map((number) => !rulesMap.includes( number + '|' + page[0] )).indexOf(false); 
-    if ( smallest === -1 ){
+    }
+
+    const smallest = page
+      .map((number) => !rulesMap.includes(number + "|" + page[0]))
+      .indexOf(false);
+    if (smallest === -1) {
       const first = page[0];
       page.splice(0, 1);
 
-      return first + ',' + this.orderPage(page, rulesMap);
+      return first + "," + this.orderPage(page, rulesMap);
     }
 
     [page[0], page[smallest]] = [page[smallest], page[0]];
-    
+
     return this.orderPage(page, rulesMap);
   }
-
 
   mitddleOfPage(page: string) {
     const pageNumbers = page.split(",").map(Number);
@@ -48,7 +53,14 @@ class solver {
 
     const rulesMap = rules.split("\n");
 
-    return pages.split("\n").map((page) => this.pageIsInOrder(page.split(","), rulesMap) ? this.mitddleOfPage(page) : 0).reduce((m, n) => m + n);    
+    return pages
+      .split("\n")
+      .map((page) =>
+        this.pageIsInOrder(page.split(","), rulesMap) ?
+          this.mitddleOfPage(page)
+        : 0,
+      )
+      .reduce((m, n) => m + n);
   }
 
   part2() {
@@ -56,7 +68,14 @@ class solver {
 
     const rulesMap = rules.split("\n");
 
-    return pages.split("\n").map((page) => this.pageIsInOrder(page.split(","), rulesMap) ? 0 : this.mitddleOfPage(this.orderPage(page.split(","), rulesMap))).reduce((m, n) => m + n);   
+    return pages
+      .split("\n")
+      .map((page) =>
+        this.pageIsInOrder(page.split(","), rulesMap) ? 0 : (
+          this.mitddleOfPage(this.orderPage(page.split(","), rulesMap))
+        ),
+      )
+      .reduce((m, n) => m + n);
   }
 }
 
@@ -145,7 +164,7 @@ run({
           97,13,75,29,47
           `,
         expected: 123,
-      }
+      },
     ],
     solution: part2,
   },

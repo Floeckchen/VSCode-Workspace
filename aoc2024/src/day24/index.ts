@@ -2,35 +2,41 @@ import run from "aocrunner";
 
 const parseInput = (rawInput: string) => rawInput;
 
-const getInitialInputAndWires = (input: string) => { 
+const getInitialInputAndWires = (input: string) => {
   const [initalInput, wires] = input.split("\n\n");
 
-  return [initalInput.split("\n").map(x => x.split(": ")), wires.split("\n").map(x => x.split(" -> ") )];
+  return [
+    initalInput.split("\n").map((x) => x.split(": ")),
+    wires.split("\n").map((x) => x.split(" -> ")),
+  ];
 };
 
 class solver {
   private input: string;
-  private wires : Map<string, number>;
-  private wireConnections :Map<string, string>;
+  private wires: Map<string, number>;
+  private wireConnections: Map<string, string>;
 
   constructor(input: string) {
     this.input = input;
     this.wires = new Map<string, number>();
 
-    const [initialInput, wireConnections] = getInitialInputAndWires(this.input);    
-    
-    this.wireConnections = wireConnections.reduce((acc, [value, key]) => { acc.set(key as string, value as string); return acc }, new Map<string, string>())
+    const [initialInput, wireConnections] = getInitialInputAndWires(this.input);
 
-    for ( const [key, value] of initialInput ) {
+    this.wireConnections = wireConnections.reduce((acc, [value, key]) => {
+      acc.set(key as string, value as string);
+      return acc;
+    }, new Map<string, string>());
+
+    for (const [key, value] of initialInput) {
       this.wires.set(key as string, parseInt(value as string));
     }
-  
-    for ( const wire of this.wireConnections.keys() ) {
-      this.wires.set( wire, -1);
+
+    for (const wire of this.wireConnections.keys()) {
+      this.wires.set(wire, -1);
     }
   }
 
-  logWire(start: string, depth=0) {
+  logWire(start: string, depth = 0) {
     if (depth > 10) {
       return;
     }
@@ -48,7 +54,7 @@ class solver {
   setWiresMap(i: number) {
     this.wires = new Map<string, number>();
 
-    const [initialInput, _] = getInitialInputAndWires(this.input);  
+    const [initialInput, _] = getInitialInputAndWires(this.input);
 
     for ( const [key, _] of initialInput ) {
       if ( parseInt(key.slice(1)) == i  || parseInt(key.slice(1)) == i + 1 || parseInt(key.slice(1)) == i + 2 ) {  
@@ -61,9 +67,9 @@ class solver {
         this.wires.set(key as string, 0);
       }
     }
-  
-    for ( const wire of this.wireConnections.keys() ) {
-      this.wires.set( wire, -1);
+
+    for (const wire of this.wireConnections.keys()) {
+      this.wires.set(wire, -1);
     }
   }
 
@@ -129,8 +135,8 @@ class solver {
     return true;
   }
 
-  evaluateWire(wire: string, visited : Array<string> = []) {
-    if( this.wires.get(wire) != -1 ) {
+  evaluateWire(wire: string, visited: Array<string> = []) {
+    if (this.wires.get(wire) != -1) {
       return this.wires.get(wire);
     }
     if (visited.includes(wire)) {
@@ -149,7 +155,7 @@ class solver {
       return -1;
     }
 
-    switch(operator) {
+    switch (operator) {
       case "AND":
         this.wires.set(wire, firstValue & secondValue);
         break;
@@ -164,29 +170,27 @@ class solver {
     return this.wires.get(wire);
   }
 
-
-
   part1() {
     let result = 0;
 
-    for( const wire of this.wires.keys() ) {
+    for (const wire of this.wires.keys()) {
       if (wire[0] != "z") {
         continue;
       }
-      result += this.evaluateWire(wire)! * ( 2 ** parseInt(wire.slice(1)));
+      result += this.evaluateWire(wire)! * 2 ** parseInt(wire.slice(1));
     }
 
     return result;
   }
 
-  getErrorCount( ) {
+  getErrorCount() {
     let errorCount = 0;
     for ( let i = 0; i < 42; i++ ) {
       this.setWiresMap(i);
 
-      let result = 0;      
+      let result = 0;
 
-      for( const wire of this.wires.keys() ) {
+      for (const wire of this.wires.keys()) {
         if (wire[0] != "z") {
           continue;
         }

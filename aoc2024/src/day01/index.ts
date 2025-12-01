@@ -47,8 +47,7 @@ const part2 = (rawInput: string) => {
   list1 = list1.sort((a, b) => a - b);
   list2 = list2.sort((a, b) => a - b);
 
-  for (let i = 0; i < list1.length; i++) {  
-    
+  for (let i = 0; i < list1.length; i++) {
     result += list1[i] * getOccurrence(list2, list1[i]);
   }
 
@@ -64,7 +63,7 @@ const getOccurrence = (array: Array<number>, value: number) => {
   }
   return result;
   //return array.filter((v) => (v === value)).length;
-}
+};
 
 run({
   part1: {

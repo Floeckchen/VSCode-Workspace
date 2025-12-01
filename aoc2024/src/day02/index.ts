@@ -9,7 +9,7 @@ class solver {
 
   input: string;
 
-  part1() : string {
+  part1(): string {
     const reports = this.getReports();
 
     let validReports = 0;
@@ -24,7 +24,7 @@ class solver {
     return validReports + "";
   }
 
-  part2() : string {
+  part2(): string {
     const reports = this.getReports();
 
     let validReports = 0;
@@ -35,7 +35,7 @@ class solver {
       for (let j = 0; j < report.length; j++) {
         const tempReport = [...report];
 
-        tempReport.splice(j, 1);   
+        tempReport.splice(j, 1);
 
         if (this.reportIsValid(tempReport)) {
           validReports++;
@@ -48,7 +48,9 @@ class solver {
   }
 
   getReports() {
-    return this.input.split("\n").map(report => { return report.split(" ").map(Number) });
+    return this.input.split("\n").map((report) => {
+      return report.split(" ").map(Number);
+    });
   }
 
   reportIsValid(report: Array<number>): boolean {
@@ -56,10 +58,12 @@ class solver {
   }
 
   isMonotone(report: Array<number>): boolean {
-    const isIncreasing = ( report[0] < report[1] );
+    const isIncreasing = report[0] < report[1];
     for (let i = 0; i < report.length - 1; i++) {
-      if ( (isIncreasing && report[i] > report[i + 1]) 
-        || (!isIncreasing && report[i] < report[i + 1]) ) {
+      if (
+        (isIncreasing && report[i] > report[i + 1]) ||
+        (!isIncreasing && report[i] < report[i + 1])
+      ) {
         return false;
       }
     }
@@ -69,7 +73,7 @@ class solver {
   isNotSteep(report: Array<number>): boolean {
     for (let i = 0; i < report.length - 1; i++) {
       const diff = Math.abs(report[i] - report[i + 1]);
-      if ( (diff > 3) ||( diff == 0)) {
+      if (diff > 3 || diff == 0) {
         return false;
       }
     }
@@ -78,18 +82,16 @@ class solver {
   }
 }
 
-
-
 const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return  new solver( input ).part1();
+  return new solver(input).part1();
 };
 
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return new solver( input ).part2();;
+  return new solver(input).part2();
 };
 
 run({

@@ -10,21 +10,21 @@ class solver {
   }
 
   part1() {
-    const grid = this.input.split("\n").map( (line) => line.split(""));
+    const grid = this.input.split("\n").map((line) => line.split(""));
 
     const min_x = 0;
     const min_y = 0;
     const max_x = grid[0].length;
     const max_y = grid.length;
 
-    const antennas : string[] = [];
-    const antinodes : Set<string> = new Set();
+    const antennas: string[] = [];
+    const antinodes: Set<string> = new Set();
 
     //Find all antennas
     for (let i = 0; i < grid.length; i++) {
       for (let j = 0; j < grid[i].length; j++) {
         if (grid[i][j] != "." && antennas.includes(grid[i][j]) == false) {
-          antennas.push(grid[i][j]);          
+          antennas.push(grid[i][j]);
         }
       }
     }
@@ -34,13 +34,10 @@ class solver {
 
       for (let row = 0; row < grid.length; row++) {
         for (let column = 0; column < grid[row].length; column++) {
-
           if (grid[row][column] == antenna) {
-
             for (let y = row; y < grid.length; y++) {
               for (let x = 0; x < grid[y].length; x++) {
-
-                if ( y === row && x <= column ) {
+                if (y === row && x <= column) {
                   continue;
                 }
 
@@ -54,11 +51,15 @@ class solver {
                   const y2 = y - dist_y;
                   const x2 = x - dist_x;
 
-                  if (!(y1 < min_y || y1 >= max_y || x1 < min_x || x1 >= max_x)) {
+                  if (
+                    !(y1 < min_y || y1 >= max_y || x1 < min_x || x1 >= max_x)
+                  ) {
                     antinodes.add(`${y1},${x1}`);
                   }
 
-                  if (!(y2 < min_y || y2 >= max_y || x2 < min_x || x2 >= max_x)) {
+                  if (
+                    !(y2 < min_y || y2 >= max_y || x2 < min_x || x2 >= max_x)
+                  ) {
                     antinodes.add(`${y2},${x2}`);
                   }
                 }
@@ -72,22 +73,22 @@ class solver {
     return antinodes.size;
   }
 
-  part2()  {
-    const grid = this.input.split("\n").map( (line) => line.split(""));
+  part2() {
+    const grid = this.input.split("\n").map((line) => line.split(""));
 
     const min_x = 0;
     const min_y = 0;
     const max_x = grid[0].length;
     const max_y = grid.length;
 
-    const antennas : string[] = [];
-    const antinodes : Set<string> = new Set();
+    const antennas: string[] = [];
+    const antinodes: Set<string> = new Set();
 
     //Find all antennas
     for (let i = 0; i < grid.length; i++) {
       for (let j = 0; j < grid[i].length; j++) {
         if (grid[i][j] != "." && antennas.includes(grid[i][j]) == false) {
-          antennas.push(grid[i][j]);          
+          antennas.push(grid[i][j]);
         }
       }
     }
@@ -97,13 +98,10 @@ class solver {
 
       for (let row = 0; row < grid.length; row++) {
         for (let column = 0; column < grid[row].length; column++) {
-
           if (grid[row][column] == antenna) {
-
             for (let y = row; y < grid.length; y++) {
               for (let x = 0; x < grid[y].length; x++) {
-
-                if ( y === row && x <= column ) {
+                if (y === row && x <= column) {
                   continue;
                 }
 
@@ -117,13 +115,17 @@ class solver {
                   let y2 = y;
                   let x2 = x;
 
-                  while (!(y1 < min_y || y1 >= max_y || x1 < min_x || x1 >= max_x)) {
+                  while (
+                    !(y1 < min_y || y1 >= max_y || x1 < min_x || x1 >= max_x)
+                  ) {
                     antinodes.add(`${y1},${x1}`);
                     y1 += dist_y;
                     x1 += dist_x;
                   }
 
-                  while (!(y2 < min_y || y2 >= max_y || x2 < min_x || x2 >= max_x)) {
+                  while (
+                    !(y2 < min_y || y2 >= max_y || x2 < min_x || x2 >= max_x)
+                  ) {
                     antinodes.add(`${y2},${x2}`);
                     y2 -= dist_y;
                     x2 -= dist_x;
@@ -178,7 +180,7 @@ run({
   part2: {
     tests: [
       {
-      input: `
+        input: `
       ............
       ........0...
       .....0......
@@ -192,8 +194,8 @@ run({
       ............
       ............
       `,
-      expected: 34,
-    },
+        expected: 34,
+      },
     ],
     solution: part2,
   },

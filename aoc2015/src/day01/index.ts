@@ -34,7 +34,7 @@ const part2 = (rawInput: string) => {
     }
   }
 
-  return Infinity
+  return Infinity;
 };
 
 run({
@@ -42,40 +42,40 @@ run({
     tests: [
       {
         input: `(())`,
-        expected: 0
+        expected: 0,
       },
-    {
+      {
         input: `()()`,
-        expected: 0
-    },
-    {
+        expected: 0,
+      },
+      {
         input: `(((`,
-        expected: 3
+        expected: 3,
       },
-    {
+      {
         input: `(()(()(`,
-        expected: 3
+        expected: 3,
       },
-    {
+      {
         input: `))(((((`,
-        expected: 3
+        expected: 3,
       },
-    {
+      {
         input: `())`,
-        expected: -1
+        expected: -1,
       },
-    {
+      {
         input: `))(`,
-        expected: -1
+        expected: -1,
       },
-    {
+      {
         input: `)))`,
-        expected: -3
+        expected: -3,
       },
-    {
+      {
         input: `)())())`,
-        expected: -3
-      }
+        expected: -3,
+      },
     ],
     solution: part1,
   },
@@ -83,12 +83,12 @@ run({
     tests: [
       {
         input: `)`,
-        expected: 1
+        expected: 1,
       },
       {
         input: `()())`,
-        expected: 5
-      }
+        expected: 5,
+      },
     ],
     solution: part2,
   },
