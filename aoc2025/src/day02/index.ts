@@ -65,13 +65,41 @@ class solver {
     }
     return minNumber
   }
+  isInvalidNumber(val: number) : number {
+    const length = this.getLength(val);
+
+    for ( let iter = 1; iter <= length/2; iter++ ) {
+      if ( length % iter != 0 ) {
+        continue;
+      };
+
+      const firstPart = Math.floor( val / (10 ** (length - iter)) );
+
+      let constructedNumber = 0;
+      for ( let repeat = 0; repeat < length / iter; repeat++ ) {
+        constructedNumber = constructedNumber * (10 ** iter) + firstPart;
+      }
+
+      if ( constructedNumber == val ) {
+        return val;
+      }
+
+    }
+    return 0;
+  }
+  getInvalidNumbersInRangeP2(range: number[]) : number {   
+    return Array.from({length: range[1] - range[0] + 1}, (_, i) => i + range[0]).map( number => 
+      this.isInvalidNumber(number)
+    ).reduce( (a,b) => a + b, 0);
+
+  }
 
   part1() {  
     return this.ranges.map( range => this.getInvalidNumbersInRange(range)).reduce( (a,b) => a + b, 0);
   }
 
   part2() {
-    return 0;
+     return this.ranges.map( range => this.getInvalidNumbersInRangeP2(range)).reduce( (a,b) => a + b, 0);
   }
 
 
@@ -103,13 +131,15 @@ run({
   },
   part2: {
     tests: [
-      // {
-      //   input: ``,
-      //   expected: "",
-      // },
+      {
+        input: `11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
+1698522-1698528,446443-446449,38593856-38593862,565653-565659,
+824824821-824824827,2121212118-2121212124`,
+        expected: 4174379265,
+      },
     ],
     solution: part2,
   },
   trimTestInputs: true,
-  onlyTests: false,
+  onlyTests: false
 });
