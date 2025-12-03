@@ -1,17 +1,11 @@
 import run from "aocrunner";
-import { get } from "http";
 
 const parseInput = (rawInput: string) => rawInput;
 
-const mod =(n : number, m :number ) : number => {
-  return ((n % m) + m) % m;
-};
-
-
 class solver {
   private input: string;
-  private ranges : number[][];
-  private dialPosition : number = solver.starting_position;
+  private ranges: number[][];
+  private dialPosition: number = solver.starting_position;
 
   static starting_position = 50;
 
@@ -21,85 +15,85 @@ class solver {
     this.ranges = this.input.split(",").map(line => line.split("-").map(Number));
   }
 
-  getInvalidNumbersInRange(range: number[]) : number {   
+  getInvalidNumbersInRange(range: number[]): number {
     const minNumber = this.getMinNumber(range[0]);
     const maxNumber = this.getMaxNumber(range[1]);
 
-    return Array.from({length: maxNumber - minNumber + 1}, (_, i) => i + minNumber).map( number => 
+    return Array.from({ length: maxNumber - minNumber + 1 }, (_, i) => i + minNumber).map(number =>
       this.getInvalidNumber(number)
-    ).reduce( (a,b) => a + b, 0);
+    ).reduce((a, b) => a + b, 0);
 
   }
 
-  getLength =(val : number): number => {
+  getLength = (val: number): number => {
     return val.toString().length;
   }
 
-  getInvalidNumber(val: number) : number {
-    return  val * ( 10 ** this.getLength(val)  ) + val ;
+  getInvalidNumber(val: number): number {
+    return val * (10 ** this.getLength(val)) + val;
   }
 
-  getMinNumber(val: number) : number {
+  getMinNumber(val: number): number {
     const length = this.getLength(val);
-    let halfLength:number;
-    let firstHalf:number;
+    let halfLength: number;
+    let firstHalf: number;
 
-    if ( length %2 == 0 ) {
+    if (length % 2 == 0) {
       halfLength = length / 2;
-      firstHalf = Math.floor( val / (10 ** halfLength) );
+      firstHalf = Math.floor(val / (10 ** halfLength));
     } else {
-      halfLength = Math.floor( length / 2 );
-      firstHalf = 10 ** halfLength; 
+      halfLength = Math.floor(length / 2);
+      firstHalf = 10 ** halfLength;
     }
-    
-    if ( this.getInvalidNumber(firstHalf) < val ) {
+
+    if (this.getInvalidNumber(firstHalf) < val) {
       firstHalf += 1;
     }
 
     return firstHalf;
   }
-  getMaxNumber(val: number) : number {
+  getMaxNumber(val: number): number {
     const minNumber = this.getMinNumber(val);
-    if ( this.getInvalidNumber(minNumber) > val ) {
+    if (this.getInvalidNumber(minNumber) > val) {
       return minNumber - 1;
     }
     return minNumber
   }
-  isInvalidNumber(val: number) : number {
+  isInvalidNumber(val: number): number {
     const length = this.getLength(val);
 
-    for ( let iter = 1; iter <= length/2; iter++ ) {
-      if ( length % iter != 0 ) {
+    for (let iter = 1; iter <= length / 2; iter++) {
+      if (length % iter != 0) {
         continue;
       };
 
-      const firstPart = Math.floor( val / (10 ** (length - iter)) );
+      const firstPart = Math.floor(val / (10 ** (length - iter)));
 
       let constructedNumber = 0;
-      for ( let repeat = 0; repeat < length / iter; repeat++ ) {
+      for (let repeat = 0; repeat < length / iter; repeat++) {
         constructedNumber = constructedNumber * (10 ** iter) + firstPart;
       }
 
-      if ( constructedNumber == val ) {
+      if (constructedNumber == val) {
         return val;
       }
 
     }
     return 0;
   }
-  getInvalidNumbersInRangeP2(range: number[]) : number {   
-    return Array.from({length: range[1] - range[0] + 1}, (_, i) => i + range[0]).map( number => 
+  getInvalidNumbersInRangeP2(range: number[]): number {
+    return Array.from({ length: range[1] - range[0] + 1 }, (_, i) => i + range[0]).map(number =>
       this.isInvalidNumber(number)
-    ).reduce( (a,b) => a + b, 0);
+    ).reduce((a, b) => a + b, 0);
 
   }
 
-  part1() {  
-    return this.ranges.map( range => this.getInvalidNumbersInRange(range)).reduce( (a,b) => a + b, 0);
+  part1() {
+    return this.ranges.map(range => this.getInvalidNumbersInRange(range)).reduce((a, b) => a + b, 0);
   }
 
   part2() {
-     return this.ranges.map( range => this.getInvalidNumbersInRangeP2(range)).reduce( (a,b) => a + b, 0);
+    return this.ranges.map(range => this.getInvalidNumbersInRangeP2(range)).reduce((a, b) => a + b, 0);
   }
 
 

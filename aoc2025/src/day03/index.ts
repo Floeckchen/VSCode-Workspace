@@ -9,7 +9,7 @@ class solver {
 
 
   private input: string;
-  private banks : string[];
+  private banks: string[];
 
   constructor(input: string) {
     this.input = input;
@@ -17,15 +17,15 @@ class solver {
     this.banks = this.input.split("\n");
   }
 
-  findHighestBankDigit(bank: string) : [number, number] {
+  findHighestBankDigit(bank: string): [number, number] {
     let maxDigit = -1;
     let maxIndex = -1;
 
     if (bank === "") {
-      return [maxIndex,maxDigit];
+      return [maxIndex, maxDigit];
     }
 
-    bank.split("").forEach( (digit, index) => {
+    bank.split("").forEach((digit, index) => {
       const digitValue = Number(digit);
 
       if (digitValue > maxDigit) {
@@ -33,7 +33,7 @@ class solver {
         maxIndex = index;
       }
 
-      if ( digitValue == 9 ) {
+      if (digitValue == 9) {
         return [maxIndex, maxDigit];
       }
     });
@@ -41,51 +41,51 @@ class solver {
     return [maxIndex, maxDigit];
   }
 
-  findJoltage(bank: string) : number {
+  findJoltage(bank: string): number {
 
     const [maxIndex, maxDigit] = this.findHighestBankDigit(bank);
 
-    const [bankBefore, bankAfter] = [ this.findHighestBankDigit( bank.substring(0, maxIndex) ), this.findHighestBankDigit( bank.substring(maxIndex + 1) ) ];
+    const [bankBefore, bankAfter] = [this.findHighestBankDigit(bank.substring(0, maxIndex)), this.findHighestBankDigit(bank.substring(maxIndex + 1))];
 
-    return Math.max( bankBefore[1] > 0 ? bankBefore[1] * 10 + maxDigit : 0, bankAfter[1] > 0 ? maxDigit * 10 + bankAfter[1] : 0 );
+    return Math.max(bankBefore[1] > 0 ? bankBefore[1] * 10 + maxDigit : 0, bankAfter[1] > 0 ? maxDigit * 10 + bankAfter[1] : 0);
   }
 
-  findHighestJoltage( bank: Bank, length: Length, memo: Record< Bank, Record<Length,  number>> = {}) : number {
-    if ( bank in memo && length in memo[bank] ) {
+  findHighestJoltage(bank: Bank, length: Length, memo: Record<Bank, Record<Length, number>> = {}): number {
+    if (bank in memo && length in memo[bank]) {
       return memo[bank][length];
     }
 
-    if ( length == 1 ) {
-      return Math.max( ...bank.split("").map( digit => Number(digit) ) );
+    if (length == 1) {
+      return Math.max(...bank.split("").map(digit => Number(digit)));
     }
 
-    if ( bank.length == length ) {
-      return Number( bank );
+    if (bank.length == length) {
+      return Number(bank);
     }
-      
+
     const digit = bank[0];
-    const remainingBank = bank.substring( 1 );
+    const remainingBank = bank.substring(1);
 
-    const joltage1 = Number(digit + this.findHighestJoltage( remainingBank, length - 1, memo ));
-    const joltage2 = this.findHighestJoltage( remainingBank, length, memo );
+    const joltage1 = Number(digit + this.findHighestJoltage(remainingBank, length - 1, memo));
+    const joltage2 = this.findHighestJoltage(remainingBank, length, memo);
 
-    const maxJoltage = Math.max( joltage1, joltage2 );   
+    const maxJoltage = Math.max(joltage1, joltage2);
 
-    if ( !( bank in memo ) ) {
+    if (!(bank in memo)) {
       memo[bank] = {};
     }
-   
+
     memo[bank][length] = maxJoltage;
 
     return maxJoltage;
   }
 
-  part1() {  
-    return this.banks.map( bank => this.findJoltage(bank) ).reduce( (a,b) => a + b, 0);
+  part1() {
+    return this.banks.map(bank => this.findJoltage(bank)).reduce((a, b) => a + b, 0);
   }
 
   part2() {
-     return this.banks.map( bank => this.findHighestJoltage(bank, 12) ).reduce( (a,b) => a + b, 0);
+    return this.banks.map(bank => this.findHighestJoltage(bank, 12)).reduce((a, b) => a + b, 0);
   }
 
 
@@ -118,7 +118,7 @@ run({
   },
   part2: {
     tests: [
-     {
+      {
         input: `987654321111111
 811111111111119
 234234234234278

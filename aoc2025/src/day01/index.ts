@@ -2,14 +2,14 @@ import run from "aocrunner";
 
 const parseInput = (rawInput: string) => rawInput;
 
-const mod =(n : number, m :number ) : number => {
+const mod = (n: number, m: number): number => {
   return ((n % m) + m) % m;
 }
 
 class solver {
   private input: string;
-  private rotations : string[];
-  private dialPosition : number = solver.starting_position;
+  private rotations: string[];
+  private dialPosition: number = solver.starting_position;
 
   static starting_position = 50;
 
@@ -19,14 +19,14 @@ class solver {
     this.rotations = this.input.split("\n").map(line => line.trim());
   }
 
-  rotate(rotation: string) : number {
+  rotate(rotation: string): number {
     const direction = rotation[0];
     const distance = Number(rotation.slice(1));
 
-    if ( direction == 'L' ) {
-      this.dialPosition = mod( this.dialPosition - distance, 100 );
-    } else if ( direction == 'R' ) {
-      this.dialPosition = mod( this.dialPosition + distance, 100 );
+    if (direction == 'L') {
+      this.dialPosition = mod(this.dialPosition - distance, 100);
+    } else if (direction == 'R') {
+      this.dialPosition = mod(this.dialPosition + distance, 100);
     } else {
       throw new Error(`Unknown direction ${direction} in rotation ${rotation}`);
     }
@@ -34,25 +34,25 @@ class solver {
     return this.dialPosition == 0 ? 1 : 0;
   }
 
-  rotate_count(rotation: string) : number {
+  rotate_count(rotation: string): number {
     const direction = rotation[0];
     let distance = Number(rotation.slice(1));
     let passes_zero = false;
 
-    const full_rotations = Math.floor( distance / 100 );
+    const full_rotations = Math.floor(distance / 100);
 
     distance = mod(distance, 100);
 
-    if ( direction == 'L' ) {
-      if ( this.dialPosition <= distance && this.dialPosition != 0 ) {
+    if (direction == 'L') {
+      if (this.dialPosition <= distance && this.dialPosition != 0) {
         passes_zero = true;
       }
-      this.dialPosition = mod( this.dialPosition - distance, 100 );      
-    } else if ( direction == 'R' ) {
-      if ( this.dialPosition + distance >= 100 ) {
+      this.dialPosition = mod(this.dialPosition - distance, 100);
+    } else if (direction == 'R') {
+      if (this.dialPosition + distance >= 100) {
         passes_zero = true;
       }
-      this.dialPosition = mod( this.dialPosition + distance, 100 );
+      this.dialPosition = mod(this.dialPosition + distance, 100);
     } else {
       throw new Error(`Unknown direction ${direction} in rotation ${rotation}`);
     }
@@ -61,12 +61,12 @@ class solver {
   }
 
 
-  part1() {  
-    return this.rotations.map( rotation => this.rotate(rotation) ).reduce( (sum, p) => sum + p );
+  part1() {
+    return this.rotations.map(rotation => this.rotate(rotation)).reduce((sum, p) => sum + p);
   }
 
   part2() {
-    return this.rotations.map( rotation => this.rotate_count(rotation) ).reduce( (sum, p) => sum + p );
+    return this.rotations.map(rotation => this.rotate_count(rotation)).reduce((sum, p) => sum + p);
   }
 
 
